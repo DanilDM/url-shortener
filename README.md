@@ -10,5 +10,5 @@
 ## Tech stack
 
 - Frontend: React + TypeScript + Vite
-- Backend: _
-- Database: _
+- Backend: Rust: Axum + Tokio + SQLx
+- Database: PostgreSQL
