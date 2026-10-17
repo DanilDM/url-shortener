@@ -30,7 +30,7 @@
 | Параметр           | Значення              |
 |--------------------|-----------------------|
 | Хостинг frontend   | AWS CloudFront        |
-| Хостинг backend    | AWS Lambda            |
+| Хостинг backend    | AWS EC2               |
 | Хмарне сховище     | AWS S3                |
 | База даних         | AWS Aurora PostgreSQL |
 

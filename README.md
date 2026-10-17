@@ -4,8 +4,8 @@
 
 ## Team
 
-- Владислав — frontend
-- Данило — backend
+- Владислав — frontend, QA, task-tracking
+- Данило — backend, database, architecture, DevOps
 
 ## Tech stack
 
