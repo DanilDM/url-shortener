@@ -12,3 +12,11 @@
 - Frontend: React + TypeScript + Vite
 - Backend: Rust: Axum + Tokio + SQLx
 - Database: PostgreSQL
+
+## Launching backend
+
+```
+cd backend
+docker compose up -d
+cargo run
+```
