@@ -1,0 +1,87 @@
+.page {
+  min-height: 100svh;
+  display: grid;
+  place-content: center;
+  gap: var(--space-5);
+  padding: var(--space-5);
+}
+
+.logo {
+  justify-self: center;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.card {
+  width: min(100%, 420px);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tab,
+.tabActive {
+  padding: var(--space-4);
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.tabActive {
+  color: var(--color-primary);
+  box-shadow: inset 0 -2px 0 var(--color-primary);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.form h1 {
+  font-size: 1.5rem;
+}
+
+.form label {
+  display: grid;
+  gap: var(--space-2);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.form input {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.form button {
+  padding: var(--space-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form button:hover {
+  background: var(--color-primary-hover);
+}
+
+.hint {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
