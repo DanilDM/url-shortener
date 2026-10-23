@@ -1,9 +1,11 @@
 mod db;
 mod state;
-mod cors;
+mod route;
+mod util;
+
+mod auth;
 
 use std::{env::var, net::SocketAddr};
-use axum::routing::get;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -14,13 +16,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     sqlx::migrate!("./migrations").run(&pool).await?;
 
-    let state = state::AppState { db: pool };
+    let jwt_secret = var("JWT_SECRET")?;
+
+    let state = state::App { db: pool, jwt_secret };
 
     let app = axum::Router::new()
-        .route(
-            "/api/v1/hello", // temporary route
-            get("hello from axum"))
-        .layer(cors::cors_layer()?)
+        .nest("/api/v1", route::all())
+        .layer(util::cors::layer()?)
         .with_state(state);
 
     let host = var("HOST")?;
