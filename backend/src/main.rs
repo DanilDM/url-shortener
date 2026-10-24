@@ -7,6 +7,8 @@ mod auth;
 
 use std::{env::var, net::SocketAddr};
 
+const OPENAPI_PATH: &str = "/api/v1/openapi_docs";
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenvy::dotenv().ok();
@@ -20,10 +22,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let state = state::App { db: pool, jwt_secret };
 
-    let app = axum::Router::new()
+    let (app, _) = axum_auto_openapi::Router::new()
         .nest("/api/v1", route::all())
         .layer(util::cors::layer()?)
-        .with_state(state);
+        .with_state(state)
+        .info(axum_auto_openapi::Info::new("URL Shortener", "0.1.0"))
+        .openapi_json_route(OPENAPI_PATH)
+        .swagger_ui("/api/v1/swagger", OPENAPI_PATH)
+        .finish();
 
     let host = var("HOST")?;
     let port: u16 = var("PORT")?.parse()?;

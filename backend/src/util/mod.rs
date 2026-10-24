@@ -8,7 +8,7 @@ pub fn error(status: axum::http::StatusCode, message: String)
     (status, axum::Json(ErrorResponse { error: message })).into_response()
 }
 
-#[derive(Debug, serde::Serialize)]
-struct ErrorResponse {
+#[derive(Debug, serde::Serialize, schemars::JsonSchema)]
+pub struct ErrorResponse {
     error: String,
 }
