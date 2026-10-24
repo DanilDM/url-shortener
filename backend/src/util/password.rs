@@ -7,7 +7,7 @@ pub fn hash(password: String) -> Result<String, String> {
         .map_err(|_| "Password hashing failed".to_string())
 }
 
-pub fn _verify(password: &str, hash: &str) -> bool {
+pub fn verify(password: &str, hash: &str) -> bool {
     let Ok(parsed_hash) = PasswordHash::new(hash) else {
         return false;
     };
