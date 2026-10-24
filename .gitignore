@@ -1,3 +1,5 @@
 node_modules/
 backend/target/
+frontend/dist/
 .env
+frontend/.env
