@@ -1,4 +1,5 @@
 #[derive(Clone)]
-pub struct AppState {
+pub struct App {
     pub db: sqlx::PgPool,
+    pub jwt_secret: String,
 }

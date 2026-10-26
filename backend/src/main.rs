@@ -1,9 +1,13 @@
 mod db;
 mod state;
-mod cors;
+mod route;
+mod util;
+
+mod auth;
 
 use std::{env::var, net::SocketAddr};
-use axum::routing::get;
+
+const OPENAPI_PATH: &str = "/api/v1/openapi_docs";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -14,14 +18,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     sqlx::migrate!("./migrations").run(&pool).await?;
 
-    let state = state::AppState { db: pool };
+    let jwt_secret = var("JWT_SECRET")?;
 
-    let app = axum::Router::new()
-        .route(
-            "/api/v1/hello", // temporary route
-            get("hello from axum"))
-        .layer(cors::cors_layer()?)
-        .with_state(state);
+    let state = state::App { db: pool, jwt_secret };
+
+    let (app, _) = axum_auto_openapi::Router::new()
+        .nest("/api/v1", route::all())
+        .layer(util::cors::layer()?)
+        .with_state(state)
+        .info(axum_auto_openapi::Info::new("URL Shortener", "0.1.0"))
+        .openapi_json_route(OPENAPI_PATH)
+        .swagger_ui("/api/v1/swagger", OPENAPI_PATH)
+        .finish();
 
     let host = var("HOST")?;
     let port: u16 = var("PORT")?.parse()?;

@@ -1,7 +1,7 @@
 use axum::http::{HeaderValue, Method, header};
 use tower_http::cors::CorsLayer;
 
-pub fn cors_layer() -> Result<CorsLayer, Box<dyn std::error::Error>> {
+pub fn layer() -> Result<CorsLayer, Box<dyn std::error::Error>> {
     let origins = std::env::var("CORS_ALLOWED_ORIGINS")?
         .split(',')
         .map(str::trim)

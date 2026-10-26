@@ -17,6 +17,8 @@
 
 ```
 cd backend
-docker compose up -d
+docker compose up
 cargo run
 ```
+
+Документацію у форматі OpenAPI можна знайти за `/api/v1/openapi_docs`. (А також Swagger UI за `/api/v1/swagger`)
