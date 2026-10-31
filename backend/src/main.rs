@@ -2,6 +2,7 @@ mod db;
 mod state;
 mod route;
 mod util;
+mod cron;
 
 mod auth;
 
@@ -18,12 +19,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     sqlx::migrate!("./migrations").run(&pool).await?;
 
-    let jwt_secret = var("JWT_SECRET")?;
+    cron::run_all(pool.clone());
+
+    let jwt_secret = std::sync::Arc::from(var("JWT_SECRET")?);
 
     let state = state::App { db: pool, jwt_secret };
 
     let (app, _) = axum_auto_openapi::Router::new()
-        .nest("/api/v1", route::all())
+        .nest("/api/v1", route::all(state.clone()))
         .layer(util::cors::layer()?)
         .with_state(state)
         .info(axum_auto_openapi::Info::new("URL Shortener", "0.1.0"))
