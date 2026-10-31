@@ -7,7 +7,7 @@ pub struct RegisterRequest {
     pub password: String,
 }
 
-#[derive(Debug, Serialize, sqlx::prelude::FromRow, JsonSchema)]
+#[derive(Debug, Serialize, sqlx::prelude::FromRow, JsonSchema, Clone)]
 // #[derive(sqlx::prelude::FromRow)]
 pub struct UserResponse {
     pub id: uuid::Uuid,
