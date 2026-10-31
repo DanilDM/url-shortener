@@ -57,6 +57,20 @@ pub async fn authenticated(
         }
     };
 
+    // Check if hasn't logged out
+    let revoked = sqlx::query_scalar!(
+        "SELECT EXISTS(SELECT 1 FROM revoked_tokens WHERE jti = $1)",
+        claims.jti,
+    )
+    .fetch_one(&state.db)
+    .await;
+
+    match revoked {
+        Ok(Some(false)) => {}
+        Ok(_) => return error(StatusCode::UNAUTHORIZED, "Token revoked".to_string()),
+        Err(_) => return error(StatusCode::INTERNAL_SERVER_ERROR, "Could not verify token".to_string()),
+    }
+
     // Fetch user
     let user = match sqlx::query_as!(
         model::UserResponse,
@@ -82,6 +96,7 @@ pub async fn authenticated(
     };
 
     request.extensions_mut().insert(user);
+    request.extensions_mut().insert(claims);
 
     next.run(request).await
 }

@@ -2,9 +2,11 @@ mod handler {
     pub mod register;
     pub mod login;
     pub mod me;
+    pub mod logout;
 }
 mod model;
 pub mod middleware;
+pub mod cron;
 
 use axum_auto_openapi::{
     Router, routing::{get, post},
@@ -43,6 +45,13 @@ pub fn routes(state: crate::state::App) -> Router<crate::state::App> {
             openapi_auth_codes!(
                 get(handler::me::it)
                 .response::<model::UserResponse>(200)
+            )
+        )
+        .route(
+            "/logout",
+            openapi_auth_codes!(
+                post(handler::logout::it)
+                .response::<()>(204)
             )
         )
         .route_layer(

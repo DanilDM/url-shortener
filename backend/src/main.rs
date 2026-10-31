@@ -2,6 +2,7 @@ mod db;
 mod state;
 mod route;
 mod util;
+mod cron;
 
 mod auth;
 
@@ -17,6 +18,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pool = db::create_pool(&database_url).await?;
 
     sqlx::migrate!("./migrations").run(&pool).await?;
+
+    cron::run_all(pool.clone());
 
     let jwt_secret = std::sync::Arc::from(var("JWT_SECRET")?);
 

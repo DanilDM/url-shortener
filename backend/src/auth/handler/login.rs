@@ -97,6 +97,7 @@ pub async fn it(
     let claims = model::Claims {
         sub: user.id.to_string(),
         exp: (now + expires_in) as usize,
+        jti: uuid::Uuid::new_v4(),
     };
 
     let token = match encode(

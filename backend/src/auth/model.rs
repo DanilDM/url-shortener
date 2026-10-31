@@ -28,8 +28,9 @@ pub struct LoginResponse {
     pub user: UserResponse,
 }
 
-#[derive(Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema, Clone)]
 pub struct Claims {
     pub sub: String,
     pub exp: usize,
+    pub jti: uuid::Uuid,
 }
