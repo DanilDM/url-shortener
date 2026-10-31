@@ -1,0 +1,76 @@
+@host = http://localhost:3000
+@base = {{host}}/api/v1/auth
+@username = testuser
+@password = megapass2@WORD
+
+### Register -> 201
+POST {{base}}/register
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### Register duplicate -> 409
+POST {{base}}/register
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### Login -> 200 (token captured for later requests)
+# @name login
+POST {{base}}/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+###
+@token = {{login.response.body.access_token}}
+
+### Login wrong password -> 401
+POST {{base}}/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "wrong-password"
+}
+
+### Login unknown user -> 401
+POST {{base}}/login
+Content-Type: application/json
+
+{
+  "username": "does-not-exist",
+  "password": "{{password}}"
+}
+
+### Me -> 200
+GET {{base}}/me
+Authorization: Bearer {{token}}
+
+### Me, no header -> 401
+GET {{base}}/me
+
+### Me, malformed scheme -> 401
+GET {{base}}/me
+Authorization: Token {{token}}
+
+### Me, garbage token -> 401
+GET {{base}}/me
+Authorization: Bearer not.a.jwt
+
+### Logout -> 204 
+POST {{base}}/logout
+Authorization: Bearer {{token}}
+
+### Me after logout -> 401 (token revoked)
+POST {{base}}/me
+Authorization: Bearer {{token}}
