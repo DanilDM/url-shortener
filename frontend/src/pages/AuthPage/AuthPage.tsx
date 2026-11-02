@@ -1,5 +1,8 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { BrandMark } from '../../components/BrandMark/BrandMark'
+import { LoginForm } from '../../components/LoginForm/LoginForm'
+import { RegisterForm } from '../../components/RegisterForm/RegisterForm'
+import { useAuthStore } from '../../store/authStore'
 import styles from './AuthPage.module.css'
 
 type AuthType = 'login' | 'register'
@@ -10,9 +13,15 @@ function isAuthType(value: string | undefined): value is AuthType {
 
 export function AuthPage() {
   const { type } = useParams<{ type: string }>()
+  const token = useAuthStore((state) => state.token)
+  const isBootstrapping = useAuthStore((state) => state.isBootstrapping)
 
   if (!isAuthType(type)) {
     return <Navigate to="/auth/login" replace />
+  }
+
+  if (!isBootstrapping && token) {
+    return <Navigate to="/dashboard" replace />
   }
 
   const isLogin = type === 'login'
@@ -43,43 +52,7 @@ export function AuthPage() {
           </Link>
         </div>
 
-        {isLogin ? (
-          <form className={styles.form} onSubmit={(event) => event.preventDefault()}>
-            <h1>Sign in</h1>
-            <label>
-              Username
-              <input name="username" type="text" autoComplete="username" />
-            </label>
-            <label>
-              Password
-              <input name="password" type="password" autoComplete="current-password" />
-            </label>
-            <button type="submit">Sign in</button>
-            <p className={styles.hint}>
-              No account? <Link to="/auth/register">Sign up</Link>
-            </p>
-          </form>
-        ) : (
-          <form className={styles.form} onSubmit={(event) => event.preventDefault()}>
-            <h1>Sign up</h1>
-            <label>
-              Username
-              <input name="username" type="text" autoComplete="username" />
-            </label>
-            <label>
-              Password
-              <input name="password" type="password" autoComplete="new-password" />
-            </label>
-            <label>
-              Repeat password
-              <input name="repeatPassword" type="password" autoComplete="new-password" />
-            </label>
-            <button type="submit">Sign up</button>
-            <p className={styles.hint}>
-              Already have an account? <Link to="/auth/login">Sign in</Link>
-            </p>
-          </form>
-        )}
+        {isLogin ? <LoginForm /> : <RegisterForm />}
       </div>
     </div>
   )
