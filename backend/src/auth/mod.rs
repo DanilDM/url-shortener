@@ -4,7 +4,7 @@ mod handler {
     pub mod me;
     pub mod logout;
 }
-mod model;
+pub mod model;
 pub mod middleware;
 pub mod cron;
 
@@ -19,6 +19,7 @@ macro_rules! openapi_auth_codes {
     ($mr:expr) => {
         $mr.response::<ErrorResponse>(401)
            .response::<ErrorResponse>(500)
+           .security("bearer_auth") 
     };
 }
 

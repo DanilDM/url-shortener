@@ -25,24 +25,6 @@ pub fn short_code(url: &str, len: usize)
     String::from_utf8(out)
 }
 
-/// handles collisions by re-hashing with a salt until the code is available
-pub fn unique_code(url: &str, len: usize, exists: impl Fn(&str) -> bool) 
--> Result<String, FromUtf8Error> {
-    let mut attempt = 0u32;
-    loop {
-        let salted = if attempt == 0 {
-            url.to_string()
-        } else {
-            format!("{url}#{attempt}")
-        };
-        let code = short_code(&salted, len)?;
-        if !exists(&code) {
-            return Ok(code);
-        }
-        attempt += 1;
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
