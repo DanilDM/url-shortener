@@ -2,7 +2,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, JsonSchema)]
-pub struct RegisterRequest {
+pub(super) struct RegisterRequest {
     pub username: String,
     pub password: String,
 }
@@ -15,13 +15,13 @@ pub struct UserResponse {
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
-pub struct LoginRequest {
+pub(super) struct LoginRequest {
     pub username: String,
     pub password: String,
 }
 
 #[derive(Debug, Serialize, JsonSchema)]
-pub struct LoginResponse {
+pub(super) struct LoginResponse {
     pub access_token: String,
     pub token_type: &'static str,
     pub expires_in: u64,

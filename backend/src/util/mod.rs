@@ -1,5 +1,6 @@
 pub mod cors;
 pub mod password;
+pub mod url;
 
 use axum::response::IntoResponse;
 

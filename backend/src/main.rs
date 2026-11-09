@@ -5,6 +5,7 @@ mod util;
 mod cron;
 
 mod auth;
+mod urls;
 
 use std::{env::var, net::SocketAddr};
 
