@@ -1,3 +1,4 @@
+import { CreateLinkForm } from '../../components/CreateLinkForm/CreateLinkForm'
 import { DashboardHeader } from '../../components/DashboardHeader/DashboardHeader'
 import styles from './DashboardPage.module.css'
 
@@ -8,11 +9,13 @@ export function DashboardPage() {
       <main className={styles.main}>
         <section className={styles.section}>
           <h1>Create short link</h1>
-          <p className={styles.placeholder}>CreateLinkForm — coming next</p>
+          <CreateLinkForm />
         </section>
         <section className={styles.section}>
           <h2>Your links</h2>
-          <p className={styles.placeholder}>LinksList — coming next</p>
+          <p className={styles.placeholder}>
+            LinksList will appear here after the list API is ready.
+          </p>
         </section>
       </main>
     </div>

@@ -24,5 +24,25 @@ export const registerSchema = z
     path: ['repeatPassword'],
   })
 
+export const createLinkSchema = z.object({
+  url: z
+    .string()
+    .min(1, 'URL is required')
+    .trim()
+    .url('Enter a valid URL')
+    .refine((value) => {
+      try {
+        const parsed = new URL(value)
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+      } catch {
+        return false
+      }
+    }, 'Only http or https URLs are allowed')
+    .refine((value) => value.length <= 512, 'URL must be at most 512 characters'),
+  expiresAt: z.string().optional(),
+})
+
 export type LoginFormValues = z.infer<typeof loginSchema>
 export type RegisterFormValues = z.infer<typeof registerSchema>
+export type CreateLinkFormValues = z.infer<typeof createLinkSchema>
+

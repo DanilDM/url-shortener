@@ -13,3 +13,17 @@ export type LoginResponse = {
 export type ApiErrorBody = {
   error: string
 }
+
+export type CreateLinkRequest = {
+  url: string
+  expires_at?: string
+}
+
+export type CreateLinkResponse = {
+  id: string
+  code: string
+  original_url: string
+  created_at: string
+  expires_at: string | null
+}
+
