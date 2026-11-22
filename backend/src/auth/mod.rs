@@ -4,7 +4,7 @@ mod handler {
     pub mod me;
     pub mod logout;
 }
-pub mod model;
+pub mod dto;
 pub mod middleware;
 pub mod cron;
 
@@ -28,14 +28,14 @@ pub fn routes(state: crate::state::App) -> Router<crate::state::App> {
         .route(
             "/register",
             post(handler::register::it)
-                .response::<model::UserResponse>(201)
+                .response::<dto::UserResponse>(201)
                 .response::<ErrorResponse>(409)
                 .response::<ErrorResponse>(500)
         )
         .route(
             "/login",
             post(handler::login::it)
-                .response::<model::LoginResponse>(200)
+                .response::<dto::LoginResponse>(200)
                 .response::<ErrorResponse>(401)
                 .response::<ErrorResponse>(500)
         );
@@ -45,7 +45,7 @@ pub fn routes(state: crate::state::App) -> Router<crate::state::App> {
             "/me",
             openapi_auth_codes!(
                 get(handler::me::it)
-                .response::<model::UserResponse>(200)
+                .response::<dto::UserResponse>(200)
             )
         )
         .route(

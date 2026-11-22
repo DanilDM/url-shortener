@@ -2,11 +2,11 @@ use axum::{Json, extract::State, http::StatusCode, response::IntoResponse as _};
 use jsonwebtoken::{EncodingKey, Header, encode};
 
 use crate::util::error;
-use super::super::model;
+use super::super::dto;
 
 pub async fn it(
     State(state): State<crate::state::App>,
-    Json(payload): Json<model::LoginRequest>,
+    Json(payload): Json<dto::LoginRequest>,
 ) -> axum::response::Response {
     struct UserCredentials 
         { id            : uuid::Uuid
@@ -94,7 +94,7 @@ pub async fn it(
         }
     };
 
-    let claims = model::Claims {
+    let claims = dto::Claims {
         sub: user.id.to_string(),
         exp: (now + expires_in) as usize,
         jti: uuid::Uuid::new_v4(),
@@ -115,11 +115,11 @@ pub async fn it(
         }
     };
 
-    Json(model::LoginResponse {
+    Json(dto::LoginResponse {
         access_token: token,
         token_type: "Bearer",
         expires_in,
-        user: model::UserResponse {
+        user: dto::UserResponse {
             id: user.id,
             username: user.username,
         },
