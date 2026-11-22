@@ -2,7 +2,7 @@ use axum::{Extension, extract::State, http::StatusCode};
 
 pub async fn it(
     State(state): State<crate::state::App>,
-    Extension(claims): Extension<super::super::model::Claims>,
+    Extension(claims): Extension<super::super::dto::Claims>,
 ) -> Result<StatusCode, axum::response::Response> {
     sqlx::query!(
         "INSERT INTO revoked_tokens (jti, expires_at)

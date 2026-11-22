@@ -8,7 +8,7 @@ use axum::{
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 
 use crate::{state, util::error};
-use super::model;
+use super::dto;
 
 pub async fn authenticated(
     State(state): State<state::App>,
@@ -32,7 +32,7 @@ pub async fn authenticated(
     };
 
     // Validate JWT
-    let claims = match decode::<model::Claims>(
+    let claims = match decode::<dto::Claims>(
         token,
         &DecodingKey::from_secret(state.jwt_secret.as_bytes()),
         &Validation::new(Algorithm::HS256),
@@ -73,7 +73,7 @@ pub async fn authenticated(
 
     // Fetch user
     let user = match sqlx::query_as!(
-        model::UserResponse,
+        dto::UserResponse,
         "SELECT id, username FROM users WHERE id = $1",
         user_id,
     )

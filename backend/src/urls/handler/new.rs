@@ -2,16 +2,16 @@ use axum::{Extension, Json, extract::State, http::StatusCode, response::Response
 use chrono::Utc;
 
 use crate::util::error;
-use super::super::model;
+use super::super::dto;
 
 const MAX_ATTEMPTS: usize = 5;
 const CODE_LEN: usize = 8;
 
 pub async fn it(
     State(state): State<crate::state::App>,
-    Extension(user): Extension<crate::auth::model::UserResponse>,
-    Json(req): Json<model::NewRequest>,
-) -> Result<(StatusCode, Json<model::NewResponse>), Response> {
+    Extension(user): Extension<crate::auth::dto::UserResponse>,
+    Json(req): Json<dto::NewRequest>,
+) -> Result<(StatusCode, Json<dto::Link>), Response> {
     let long_url; 
     match crate::util::url::validate(&req.url) {
         Ok(url) => long_url = url.to_string(),
@@ -43,11 +43,11 @@ pub async fn it(
         }
 
         let result = sqlx::query_as!( 
-            model::NewResponse,
+            dto::Link,
             r#"
             INSERT INTO short_links (user_id, code, original_url, expires_at)
             VALUES ($1, $2, $3, $4)
-            RETURNING id, code, original_url, created_at, expires_at
+            RETURNING id, code, original_url, created_at, expires_at, click_count, last_clicked_at
             "#,
             user.id,
             code,

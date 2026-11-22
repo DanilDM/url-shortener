@@ -9,7 +9,7 @@ mod urls;
 
 use std::{env::var, net::SocketAddr};
 
-const OPENAPI_PATH: &str = "/api/v1/openapi_docs";
+const OPENAPI_PATH: &str = "/api/v1/openapi.json";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

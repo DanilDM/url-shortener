@@ -1,11 +1,11 @@
 use axum::{Json, extract::State, http::StatusCode, response::Response};
 
 use crate::util::error;
-use super::super::model;
+use super::super::dto;
 
 pub async fn it(
     State(state): State<crate::state::App>,
-    Json(payload): Json<model::RegisterRequest>,
+    Json(payload): Json<dto::RegisterRequest>,
 ) -> Response {
     let username = payload.username;
     let password = payload.password;
@@ -23,7 +23,7 @@ pub async fn it(
     };
 
     let result = sqlx::query_as!(
-        model::UserResponse,
+        dto::UserResponse,
         r#"
         INSERT INTO users (username, password_hash)
         VALUES ($1, $2)
